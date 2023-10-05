@@ -1,0 +1,16 @@
+# Ignorar directorio de imágenes de entrenamiento
+/__pycache__/
+
+/myvenv/
+
+/data/
+/dataset_yolov8/
+
+# Ignorar todos los archivos de imagen dentro del directorio
+# *.jpg
+# *.png
+# *.gif
+
+
+
+
