@@ -19,9 +19,11 @@ last_key2_press_time = timer()  # Paso 1: Inicialización para tecla '2'
 
 
 def press_keys():
-    pydirectinput.press("h")
-    time.sleep(0.5)  # Espera de 50ms
-    pydirectinput.press("1")
+    # pydirectinput.press("h")
+    # pyautogui.typewrite("h")
+    time.sleep(1)  # Espera de !50ms
+    pyautogui.typewrite("1")
+    # pydirectinput.press("1")
 
 
 def check_reset_detection():
@@ -31,7 +33,8 @@ def check_reset_detection():
     if (
         last_detected_time is None or (current_time - last_detected_time) > 18
     ):  # Han pasado 18 segundos
-        pydirectinput.press("1")
+        # pydirectinput.press("1")
+        pyautogui.typewrite("1")
         time.sleep(0.5)  # Espera de 50ms
 
 
@@ -69,7 +72,7 @@ def process_image(onnx_model, input_image):
         (minScore, maxScore, minClassLoc, (x, maxClassIndex)) = cv2.minMaxLoc(
             classes_scores
         )
-        if maxScore >= 0.15:
+        if maxScore >= 0.04:
             box = [
                 outputs[0][i][0] - (0.5 * outputs[0][i][2]),
                 outputs[0][i][1] - (0.5 * outputs[0][i][3]),
@@ -107,11 +110,26 @@ def process_image(onnx_model, input_image):
     # Verificar detecciones
     global hook_ok_count, last_detection_time  # Usamos las variables globales
     for detection in detections:
-        if detection["class_name"] == "hook_ok" or detection["class_id"] == 0:
+        # or detection["class_id"] == 0
+        if detection["class_name"] == "hook_ok":
             hook_ok_count += 1
-            press_keys()
             last_detection_time = timer()  # Paso 3: Actualización del tiempo
+
+            # Calcula el centro del recuadro
+            x_center = round(
+                (detection["box"][0] + (detection["box"][2] / 2)) * detection["scale"]
+            )
+            y_center = round(
+                (detection["box"][1] + (detection["box"][3] / 2)) * detection["scale"]
+            )
+
+            # Mueve el mouse al centro del recuadro y hace un click derecho
+            pyautogui.moveTo(x_center + 640, y_center)
+            pyautogui.rightClick()
+
+            press_keys()
             print(f"hook_ok detected {hook_ok_count} times.")
+            pyautogui.moveTo(20, 20)
 
     return original_image
 
@@ -125,29 +143,32 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
+    # pydirectinput.press("2")
+    pyautogui.typewrite("2")
+    time.sleep(4)  # Espera de 50ms
+    pyautogui.typewrite("1")
+
     while True:
         # Take a screenshot
-
         current_time = timer()  # Obtener tiempo actual
-
-        # pydirectinput.press("2")
-        # time.sleep(0.5)  # Espera de 50ms
-
         # Verificación de 18 segundos sin detección
         if current_time - last_detection_time > 18:
-            pydirectinput.press("1")
-            time.sleep(0.5)  # Espera de 50ms
+            # pydirectinput.press("1")
+            pyautogui.typewrite("1")
+            time.sleep(0.4)  # Espera de 50ms
             last_detection_time = current_time
             print("18 seconds without detection. Pressed '1'.")
 
         # Paso 2: Verificación de 10.09 minutos para presionar la tecla '2'
-        # if current_time - last_key2_press_time > (
-        #     10.09 * 60
-        # ):  # 10.5 minutos convertidos a segundos
-        #     pydirectinput.press("2")
-        #     time.sleep(0.5)  # Espera de 50ms
-        #     last_key2_press_time = current_time
-        #     print("10.5 minutes passed. Pressed '2'.")
+        if current_time - last_key2_press_time > (
+            10.09 * 60
+        ):  # 10.5 minutos convertidos a segundos
+            # pydirectinput.press("2")
+            pyautogui.typewrite("2")
+            time.sleep(4)  # Espera de 50ms
+            pyautogui.typewrite("1")
+            last_key2_press_time = current_time
+            print("10.09 minutes passed. Pressed '2'.")
 
         screen = pyautogui.screenshot()
         screen_array = np.array(screen)
@@ -156,9 +177,9 @@ if __name__ == "__main__":
 
         # Process and get results
         processed_img = process_image(args.model, corrected_colors)
-        cv2.imshow("YOLO", processed_img)
+        # cv2.imshow("YOLO", processed_img)
 
-        time.sleep(0.3)
+        time.sleep(0.25)
 
         # Wait 0.3 seconds (300 ms) and check for exit
         if cv2.waitKey(1) & 0xFF == ord("q"):
