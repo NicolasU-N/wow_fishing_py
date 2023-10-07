@@ -72,7 +72,7 @@ def process_image(onnx_model, input_image):
         (minScore, maxScore, minClassLoc, (x, maxClassIndex)) = cv2.minMaxLoc(
             classes_scores
         )
-        if maxScore >= 0.04:
+        if maxScore >= 0.16:
             box = [
                 outputs[0][i][0] - (0.5 * outputs[0][i][2]),
                 outputs[0][i][1] - (0.5 * outputs[0][i][3]),
@@ -138,12 +138,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--model",
-        default="./training_results/wow_bot_yolov8n_v4/weights/best.onnx",
+        default="./training_results/wow_bot_yolov8n_v42/weights/best.onnx",
         help="Input your onnx model.",
     )
     args = parser.parse_args()
 
     # pydirectinput.press("2")
+    pyautogui.moveTo(20, 20)
+    pyautogui.leftClick()
+
     pyautogui.typewrite("2")
     time.sleep(4)  # Espera de 50ms
     pyautogui.typewrite("1")
