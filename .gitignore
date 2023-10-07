@@ -5,6 +5,7 @@
 
 /data/
 /dataset_yolov8/
+/datasets/
 
 # Ignorar todos los archivos de imagen dentro del directorio
 # *.jpg
