@@ -72,7 +72,7 @@ def process_image(onnx_model, input_image):
         (minScore, maxScore, minClassLoc, (x, maxClassIndex)) = cv2.minMaxLoc(
             classes_scores
         )
-        if maxScore >= 0.16:
+        if maxScore >= 0.55:
             box = [
                 outputs[0][i][0] - (0.5 * outputs[0][i][2]),
                 outputs[0][i][1] - (0.5 * outputs[0][i][3]),

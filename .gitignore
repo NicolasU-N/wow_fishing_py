@@ -8,7 +8,8 @@
 /datasets/
 
 # Ignorar todos los archivos de imagen dentro del directorio
-# *.jpg
+*.jpg
+*.jpeg
 # *.png
 # *.gif
 
