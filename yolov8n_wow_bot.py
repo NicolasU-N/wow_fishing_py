@@ -19,7 +19,7 @@ last_key2_press_time = timer()  # Paso 1: Inicialización para tecla '2'
 
 
 def press_keys():
-    # pydirectinput.press("h")
+    # pydirectinput.press("h")11
     # pyautogui.typewrite("h")
     time.sleep(1)  # Espera de !50ms
     pyautogui.typewrite("1")
@@ -72,7 +72,9 @@ def process_image(onnx_model, input_image):
         (minScore, maxScore, minClassLoc, (x, maxClassIndex)) = cv2.minMaxLoc(
             classes_scores
         )
-        if maxScore >= 0.55:
+        # azshara .55
+        # mz  .50
+        if maxScore >= 0.01:
             box = [
                 outputs[0][i][0] - (0.5 * outputs[0][i][2]),
                 outputs[0][i][1] - (0.5 * outputs[0][i][3]),
@@ -129,7 +131,7 @@ def process_image(onnx_model, input_image):
 
             press_keys()
             print(f"hook_ok detected {hook_ok_count} times.")
-            pyautogui.moveTo(20, 20)
+            pyautogui.moveTo(10, 200)
 
     return original_image
 
@@ -144,7 +146,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # pydirectinput.press("2")
-    pyautogui.moveTo(20, 20)
+    pyautogui.moveTo(10, 200)
     pyautogui.leftClick()
 
     pyautogui.typewrite("2")
